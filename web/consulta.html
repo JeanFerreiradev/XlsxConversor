@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Consulta — BMP Sender</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="topbar">
+<div class="brand">BMP Sender</div>
+<nav>
+<a href="dashboard.html">Dashboard</a>
+<a href="upload.html">Novo Envio</a>
+<a href="historico.html">Histórico</a>
+<a href="#" id="logoutBtn">Sair</a>
+</nav>
+</header>
+
+
+<main class="container">
+<h1>Consulta de Protocolo</h1>
+<form id="consultaForm">
+<label>Número do Protocolo</label>
+<input id="protocolo" type="text" required>
+<button type="submit">Consultar</button>
+</form>
+
+
+<div id="resultadoConsulta" class="status-box"></div>
+</main>
+
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/consulta.js"></script>
+</body>
+</html>
