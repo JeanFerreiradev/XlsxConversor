@@ -11,6 +11,8 @@ load_dotenv()
 
 def _clean_tag(name):
     return ''.join(c if c.isalnum() else '_' for c in str(name))
+
+
 def xlsx_to_bmp_xml(xlsx_path):
     xl = pd.ExcelFile(xlsx_path)
     root = etree.Element('RootBMP')
@@ -27,6 +29,8 @@ def xlsx_to_bmp_xml(xlsx_path):
                     val = int(val)
                 etree.SubElement(item, tag).text = str(val)
     return etree.tostring(root, encoding='utf-8', xml_declaration=True)
+
+
 def sign_xml_with_pfx(xml_bytes, pfx_path=None, pfx_password=None, tag_to_sign='a025'):
     pfx_path = pfx_path or os.environ.get("PFX_PATH")
     pfx_password = pfx_password or os.environ.get("PFX_PASS")
