@@ -3,17 +3,17 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Envio — BMP Sender</title>
+<title>Envio — XLSX Conversor</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <header class="topbar">
-<div class="brand">BMP Sender</div>
+<div class="brand">XLSX Conversor</div>
 <nav>
 <a href="dashboard.html">Dashboard</a>
 <a href="consulta.html">Consultar</a>
 <a href="historico.html">Histórico</a>
-<a href="#" id="logoutBtn">Sair</a>
+<a href="index.html" id="logoutBtn">Sair</a>
 </nav>
 </header>
 
@@ -23,15 +23,6 @@
 <form id="uploadForm">
 <label>Arquivo BMP (.xlsx)</label>
 <input id="arquivoBmp" type="file" accept=".xlsx" required>
-
-
-<label>Certificado A1 (.pfx)</label>
-<input id="certificadoA1" type="file" accept=".pfx" required>
-
-
-<label>Senha do Certificado</label>
-<input id="senhaCertificado" type="password" required>
-
 
 <button type="submit">Enviar</button>
 </form>

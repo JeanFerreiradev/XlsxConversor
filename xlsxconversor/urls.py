@@ -3,9 +3,9 @@ from .views import *
 
 urlpatterns = [
     # -------------------- PROTOCOLO URLS --------------------
-    path('protocolos/', listar_todos_protocolos_view),
-    path('protocolos/salvar/', salvar_protocolo_view),
-    path('protocolos/<str:protocolo_id>/', buscar_protocolo_por_id_view),
+    path('upload_bmp/', upload_bmp, name='upload_bmp'),
+    path('submission/<int:pk>/', submission_detail),
+    path('consult_protocol/<int:pk>/', consult_protocol),
     
     # -------------------- USUARIO URLS --------------------
     path('login/', login_view, name='login'),
