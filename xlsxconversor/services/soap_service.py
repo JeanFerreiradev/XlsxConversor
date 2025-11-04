@@ -29,48 +29,45 @@ def send_bmp_xml(xml_bytes):
     pfx_path = os.environ.get("PFX_PATH")
     pfx_pass = os.environ.get("PFX_PASS")
 
-    # Carrega o PFX
-    with open(pfx_path, 'rb') as f:
-        pfx_data = f.read()
-    private_key, cert, _ = pkcs12.load_key_and_certificates(
-        pfx_data,
-        pfx_pass.encode() if pfx_pass else None
-    )
+    if not pfx_path or not os.path.exists(pfx_path):
+        raise ValueError("Certificado PFX não encontrado. Verifique a variável PFX_PATH no .env.")
 
-    # Gera arquivos temporários .pem e .key
-    key_file = tempfile.NamedTemporaryFile(delete=False, suffix=".key")
-    cert_file = tempfile.NamedTemporaryFile(delete=False, suffix=".pem")
+    # Cria envelope SOAP 1.2 com CDATA
+    envelope = f"""<?xml version="1.0" encoding="utf-8"?>
+    <soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                     xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
+      <soap12:Body>
+        <EnviarDocumento xmlns="http://tempuri.org/">
+          <xmlBMP><![CDATA[{xml_bytes.decode('utf-8')}]]></xmlBMP>
+        </EnviarDocumento>
+      </soap12:Body>
+    </soap12:Envelope>"""
+
+    cert_pem, key_pem = _pfx_to_temp_pem(pfx_path, pfx_pass)
 
     try:
-        key_file.write(private_key.private_bytes(
-            serialization.Encoding.PEM,
-            serialization.PrivateFormat.TraditionalOpenSSL,
-            serialization.NoEncryption()
-        ))
-        key_file.close()
-
-        cert_file.write(cert.public_bytes(serialization.Encoding.PEM))
-        cert_file.close()
-
         headers = {
-            "Content-Type": "text/xml; charset=utf-8",
-            "SOAPAction": "http://www.sefaz.es.gov.br/PetroleoGasWS/EnvioDocumento"  # conforme o manual
+            "Content-Type": "application/soap+xml; charset=utf-8"
         }
 
         resp = requests.post(
             url,
-            data=xml_bytes,
+            data=envelope.encode('utf-8'),
             headers=headers,
-            cert=(cert_file.name, key_file.name),  # mutual TLS aqui!
-            verify=True,  # mantém validação do servidor
+            cert=(cert_pem, key_pem),  # mutual TLS
+            verify=True,
             timeout=60
         )
 
         return resp
 
     finally:
-        os.unlink(key_file.name)
-        os.unlink(cert_file.name)
+        try:
+            os.unlink(cert_pem)
+            os.unlink(key_pem)
+        except Exception:
+            pass
 
 
 def consult_protocol_ws(protocol_number):

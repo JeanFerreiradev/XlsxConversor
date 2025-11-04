@@ -21,3 +21,10 @@ def buscar_envio_por_id(envio_id):
 
 def atualizar_response_envio(envio_id, response_text):
     db.collection('ENVIO').document(envio_id).update({'response_raw': response_text})
+    
+def buscar_total_envios():
+    # Busca o número total de envios realizados
+    docs = db.collection('ENVIO').stream()
+    envios = [{**doc.to_dict(), "id": doc.id} for doc in docs]
+    total_envios = envios.__len__()
+    return total_envios
