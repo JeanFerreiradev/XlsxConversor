@@ -1,0 +1,317 @@
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="shortcut icon" href="../staticfiles/admin/img/icon.png" type="image/png">
+
+
+
+<div class="container">
+    <!-- Cabeçalho -->
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="text-primary">
+                <i class="bi bi-speedometer2 me-2"></i>
+                Dashboard
+            </h2>
+            <p class="text-muted">Visão geral das submissões por estado e estatísticas do sistema</p>
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-outline-primary" onclick="refreshStats()">
+                <i class="bi bi-arrow-clockwise me-1"></i>Atualizar
+            </button>
+        </div>
+    </div>
+
+    <!-- Cards de estatísticas gerais -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 class="card-title">0</h4>
+                            <p class="card-text">Total de Submissões</p>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="bi bi-file-earmark-spreadsheet fs-1"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 class="card-title" id="total-sucesso">
+                                
+                                    
+                                0
+                            </h4>
+                            <p class="card-text">Enviados com Sucesso</p>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="bi bi-check-circle fs-1"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 class="card-title" id="total-processando">0</h4>
+                            <p class="card-text">Em Processamento</p>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="bi bi-hourglass-split fs-1"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card bg-danger text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 class="card-title" id="total-erro">
+                                
+                                    
+                                0
+                            </h4>
+                            <p class="card-text">Com Erro</p>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="bi bi-exclamation-triangle fs-1"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Estatísticas por Estado -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-bar-chart me-2"></i>
+                        Submissões por Estado
+                    </h5>
+                    <div class="btn-group btn-group-sm" role="group">
+                        <input type="radio" class="btn-check" name="chartType" id="chartBar" checked>
+                        <label class="btn btn-outline-primary" for="chartBar">Barras</label>
+                        
+                        <input type="radio" class="btn-check" name="chartType" id="chartPie">
+                        <label class="btn btn-outline-primary" for="chartPie">Pizza</label>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="chartEstados" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-list-check me-2"></i>
+                        Estados Ativos
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        
+                        <a href="" 
+                           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong></strong>
+                                <br><small class="text-muted"> submissões</small>
+                            </div>
+                            <div class="text-end">
+                                <span class="badge bg-success rounded-pill"></span>
+                                <span class="badge bg-danger rounded-pill"></span>
+                            </div>
+                        </a>
+                        
+                        <div class="list-group-item text-center text-muted">
+                            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                            Nenhuma submissão encontrada
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Submissões Recentes -->
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-clock-history me-2"></i>
+                        Submissões Recentes
+                    </h5>
+                    <a href="" class="btn btn-primary btn-sm">
+                        <i class="bi bi-plus-circle me-1"></i>Nova Submissão
+                    </a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Estado</th>
+                                    <th>Arquivo</th>
+                                    <th>Data Upload</th>
+                                    <th>Status</th>
+                                    <th>Protocolo</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                                <tr>
+                                    <td>
+                                        <span class="badge bg-primary"></span>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        
+                                            <span class="badge bg-success">
+                                                <i class="bi bi-check-circle me-1"></i>Sucesso
+                                            </span>
+                                        
+                                            <span class="badge bg-danger">
+                                                <i class="bi bi-x-circle me-1"></i>Erro
+                                            </span>
+                                        
+                                            <span class="badge bg-warning">
+                                                <i class="bi bi-hourglass-split me-1"></i>Processando
+                                            </span>
+                                        
+                                    </td>
+                                    <td>
+                                        
+                                            <code></code>
+                                        
+                                            <span class="text-muted">-</span>
+                                        
+                                    </td>
+                                    <td>
+                                        <a href="" 
+                                           class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted py-4">
+                                        <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                                        Nenhuma submissão encontrada
+                                    </td>
+                                </tr>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+// Dados para os gráficos
+const estadosData = {
+    
+    '': { total: 10, sucesso: 9, erro: 1},
+    
+};
+
+let chartInstance = null;
+
+// Configuração do gráfico
+function createChart(type = 'bar') {
+    const ctx = document.getElementById('chartEstados').getContext('2d');
+    
+    if (chartInstance) {
+        chartInstance.destroy();
+    }
+    
+    const estados = Object.keys(estadosData);
+    const totais = estados.map(estado => estadosData[estado].total);
+    const sucessos = estados.map(estado => estadosData[estado].sucesso);
+    const erros = estados.map(estado => estadosData[estado].erro);
+    
+    const config = {
+        type: type,
+        data: {
+            labels: estados,
+            datasets: [{
+                label: 'Total',
+                data: totais,
+                backgroundColor: type === 'pie' ? [
+                    '#007bff', '#28a745', '#ffc107', '#dc3545', '#6f42c1',
+                    '#fd7e14', '#20c997', '#6c757d', '#e83e8c', '#17a2b8'
+                ] : '#007bff'
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: type === 'pie'
+                }
+            },
+            scales: type === 'bar' ? {
+                y: {
+                    beginAtZero: true
+                }
+            } : {}
+        }
+    };
+    
+    chartInstance = new Chart(ctx, config);
+}
+
+// Atualizar estatísticas
+function refreshStats() {
+    fetch('')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload(); // Recarrega a página com novos dados
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao atualizar estatísticas:', error);
+        });
+}
+
+// Event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    createChart('bar');
+    
+    // Toggle entre tipos de gráfico
+    document.querySelectorAll('input[name="chartType"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            const type = this.id === 'chartBar' ? 'bar' : 'pie';
+            createChart(type);
+        });
+    });
+});
+</script>

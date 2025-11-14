@@ -2,14 +2,52 @@ from rest_framework.response import Response
 from rest_framework import status
 import secrets
 import tempfile, os, traceback
+from django.conf import settings
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
+import logging
+
 from .services.envio_service import *
-from .services.usuario_service import *
+from .services.usuario_service import login
 from .services.xml_service import *
 from .services.soap_service import *
+from .services.firebase_service import FirestoreService
+from .exceptions import *
 from lxml import etree
+
+logger = logging.getLogger(__name__)
+
+# Inicializa serviço que faz conexão com o Firestore
+def inicializar_firestore_service():
+    """Inicializa serviço que faz conexão com o Firestore"""
+    try:
+        credentials_path = os.environ.get("FIREBASEKEY_PATH")
+        media_root = os.path.join(settings.BASE_DIR, 'media')
+        
+        service = FirestoreService(credentials_path, media_root)
+        
+        # Testa se o Firestore está funcionando
+        if service.db is not None:
+            logger.info("Firestore inicializado com sucesso")
+            return service
+        else:
+            logger.warning("Firestore falhou na inicialização")
+            return None
+        
+    except Exception as e:
+        logger.error(f"Erro ao inicializar firestore: {e}")
+        return None
+
+firestore_service = inicializar_firestore_service()
+
+@api_view(['GET'])
+def obter_estatisticas_por_estado(request):
+    try:
+        stats = firestore_service.obter_estatisticas_por_estado()
+        return Response(stats)
+    except Exception as e:
+        return Response({"erro": {str(e)}}, status=500)
 
 # -------------------- PROTOCOLO VIEW --------------------
 @api_view(['POST'])

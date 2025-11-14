@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload BMP</title>
+    <style>
+        .drop-zone {
+            border: 2px dashed #dee2e6;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            background-color: #f8f9fa;
+        }
+
+        .drop-zone:hover,
+        .drop-zone.dragover {
+            border-color: #007bff;
+            background-color: #e7f3ff;
+        }
+
+        .file-info {
+            background-color: #e9ecef;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .progress-container {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .estado-selector {
+            background-color: white;
+            border: 2px solid #007bff;
+            border-radius: 8px;
+            padding: 15px;
+            color: rgb(26, 26, 26);
+        }
+
+        .estado-selector::placeholder {
+            color: #b3d9ff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Cabeçalho -->
+        <div class="row mb-4">
+            <div class="col">
+                <h2 class="text-primary">
+                    <i class="bi bi-cloud-upload me-2"></i>
+                    Upload de Arquivo BMP
+                </h2>
+                <p class="text-muted">
+                    Envie seu arquivo Excel (.xlsx) para conversão em XML e envio à SEFAZ-ES
+                </p>
+            </div>
+            <div class="col-auto">
+                <a href="" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i>Voltar ao Dashboard
+                </a>
+            </div>
+        </div>
+
+        <!-- Formulário de Upload -->
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-file-earmark-spreadsheet me-2"></i>
+                            Dados da Submissão
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="uploadForm" enctype="multipart/form-data">
+
+
+                            <!-- Seleção de Estado (Obrigatório) -->
+                            <div class="mb-4">
+                                <label for="estado_origem" class="form-label">
+                                    <i class="bi bi-geo-alt me-1"></i>
+                                    Estado de Origem *
+                                </label>
+                                <select class="form-select estado-selector" id="estado_origem" name="estado_origem"
+                                    required>
+                                    <option value="">Selecione o estado de origem...</option>
+                                </select>
+                                <div class="form-text">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    O estado de origem é obrigatório para categorizar corretamente sua submissão
+                                </div>
+                            </div>
+
+                            <!-- Dados da Empresa -->
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <label for="nome_empresa" class="form-label">
+                                        <i class="bi bi-building me-1"></i>
+                                        Nome da Empresa
+                                    </label>
+                                    <input type="text" class="form-control" id="nome_empresa" name="nome_empresa"
+                                        placeholder="Razão social da empresa">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="cnpj_empresa" class="form-label">
+                                        <i class="bi bi-card-text me-1"></i>
+                                        CNPJ
+                                    </label>
+                                    <input type="text" class="form-control" id="cnpj_empresa" name="cnpj_empresa"
+                                        placeholder="00.000.000/0000-00" maxlength="18">
+                                </div>
+                            </div>
+
+                            <!-- Área de Upload -->
+                            <div class="mb-4">
+                                <label class="form-label">
+                                    <i class="bi bi-cloud-upload me-1"></i>
+                                    Arquivo Excel BMP *
+                                </label>
+                                <div class="drop-zone text-center p-5" id="dropZone">
+                                    <i class="bi bi-cloud-upload fs-1 text-muted mb-3"></i>
+                                    <h5 class="text-muted">Arraste o arquivo aqui</h5>
+                                    <p class="text-muted mb-3">ou</p>
+                                    <label for="arquivo_excel" class="btn btn-primary">
+                                        <i class="bi bi-folder-open me-1"></i>
+                                        Selecionar Arquivo
+                                    </label>
+                                    <input type="file" class="form-control d-none" id="arquivo_excel"
+                                        name="arquivo_excel" accept=".xls,.xlsx">
+                                    <div class="mt-3">
+                                        <small class="text-muted">
+                                            <i class="bi bi-info-circle me-1"></i>
+                                            Formatos aceitos: .xlsx (máximo 10MB)
+                                        </small>
+                                    </div>
+                                </div>
+
+                                <!-- Informações do arquivo selecionado -->
+                                <div class="file-info" id="fileInfo">
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-file-earmark-excel fs-3 text-success me-3"></i>
+                                        <div>
+                                            <h6 class="mb-1" id="fileName"></h6>
+                                            <small class="text-muted" id="fileSize"></small>
+                                        </div>
+                                        <button type="button" class="btn btn-sm btn-outline-danger ms-auto"
+                                            id="removeFile">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Botões de Ação -->
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
+                                    <i class="bi bi-cloud-upload me-2"></i>
+                                    Enviar para Processamento
+                                </button>
+                            </div>
+                        </form>
+
+                        <!-- Barra de Progresso -->
+                        <div class="progress-container" id="progressContainer">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="text-muted">Processando arquivo...</span>
+                                <span class="text-muted" id="progressText">0%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" id="progressBar"
+                                    role="progressbar" style="width: 0%"></div>
+                            </div>
+                            <div class="mt-2">
+                                <small class="text-muted" id="progressStatus">Iniciando processamento...</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ajuda e Informações -->
+        <div class="row mt-5">
+            <div class="col-md-6">
+                <div class="card border-info">
+                    <div class="card-header bg-info text-white">
+                        <h6 class="card-title mb-0">
+                            <i class="bi bi-question-circle me-2"></i>
+                            Como Funciona?
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <ol class="list-group list-group-numbered list-group-flush">
+                            <li class="list-group-item border-0 px-0">
+                                <strong>Seleção do Estado:</strong> Escolha o estado de origem da sua empresa
+                            </li>
+                            <li class="list-group-item border-0 px-0">
+                                <strong>Upload do Excel:</strong> Envie seu arquivo BMP em formato .xlsx
+                            </li>
+                            <li class="list-group-item border-0 px-0">
+                                <strong>Conversão Automática:</strong> O sistema converte para XML seguindo o padrão
+                                BMPCAMPO.xsd
+                            </li>
+                            <li class="list-group-item border-0 px-0">
+                                <strong>Assinatura Digital:</strong> XML é assinado com certificado A1 ICP-Brasil
+                            </li>
+                            <li class="list-group-item border-0 px-0">
+                                <strong>Envio SEFAZ:</strong> Transmissão segura via webservice para SEFAZ-ES
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card border-warning">
+                    <div class="card-header bg-warning">
+                        <h6 class="card-title mb-0">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            Requisitos do Arquivo
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                Formato: Excel .xlsx
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                Tamanho máximo: 10MB
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                Estrutura conforme modelo BMP
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                Dados válidos (CNPJ, datas, volumes)
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                Máximo 6500 registros por seção
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="/xlsxconversor/web2/static/js/upload.js"></script>
+</html>

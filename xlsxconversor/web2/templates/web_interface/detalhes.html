@@ -1,0 +1,321 @@
+<div class="container">
+    <!-- Cabeçalho -->
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="text-primary">
+                <i class="bi bi-file-earmark-text me-2"></i>
+                Detalhes da Submissão
+            </h2>
+            <p class="text-muted">
+                Informações completas sobre o processamento do arquivo BMP
+            </p>
+        </div>
+        <div class="col-auto">
+            <a href="" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i>Voltar ao Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Informações Principais -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i>
+                        Informações da Submissão
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <table class="table table-sm">
+                                <tr>
+                                    <td><strong>ID da Submissão:</strong></td>
+                                    <td><code></code></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Estado de Origem:</strong></td>
+                                    <td><span class="badge bg-primary"></span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Data de Upload:</strong></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Status Atual:</strong></td>
+                                    <td>
+                                        
+                                            <span class="badge bg-success">
+                                                <i class="bi bi-check-circle me-1"></i>Sucesso
+                                            </span>
+                                        
+                                            <span class="badge bg-danger">
+                                                <i class="bi bi-x-circle me-1"></i>Erro
+                                            </span>
+                                        
+                                            <span class="badge bg-warning">
+                                                <i class="bi bi-hourglass-split me-1"></i>Processando
+                                            </span>
+                                        
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td><strong>Protocolo SEFAZ:</strong></td>
+                                    <td><code></code></td>
+                                </tr>
+                                
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Arquivo Original</h6>
+                            <table class="table table-sm">
+                                <tr>
+                                    <td><strong>Nome:</strong></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tamanho:</strong></td>
+                                    <td>
+                                        
+                                            
+                                        
+                                            N/A
+                                        
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            
+                            <h6 class="text-primary mt-3">Dados da Empresa</h6>
+                            <table class="table table-sm">
+                                <tr>
+                                    <td><strong>Nome:</strong></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>CNPJ:</strong></td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h6 class="card-title mb-0">
+                        <i class="bi bi-gear me-2"></i>
+                        Ações
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        
+                        <a href="?protocolo=" 
+                           class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-search me-1"></i>Consultar Status
+                        </a>
+                        
+                        
+                        
+                        <button class="btn btn-outline-success btn-sm" onclick="visualizarXML('xml_gerado')">
+                            <i class="bi bi-file-code me-1"></i>Ver XML Gerado
+                        </button>
+                        
+                        
+                        
+                        <button class="btn btn-outline-warning btn-sm" onclick="visualizarXML('xml_assinado')">
+                            <i class="bi bi-shield-check me-1"></i>Ver XML Assinado
+                        </button>
+                        
+                        
+                        <button class="btn btn-outline-secondary btn-sm" onclick="exportarDetalhes()">
+                            <i class="bi bi-download me-1"></i>Exportar Detalhes
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <div class="card mt-3">
+                <div class="card-header bg-success text-white">
+                    <h6 class="card-title mb-0">
+                        <i class="bi bi-cloud me-2"></i>
+                        Retorno SEFAZ
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm mb-0">
+                        <tr>
+                            <td><strong>Código:</strong></td>
+                            <td><code></code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mensagem:</strong></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Histórico de Logs -->
+    
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-clock-history me-2"></i>
+                        Histórico de Processamento
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        
+                        <div class="timeline-item mb-3">
+                            <div class="d-flex">
+                                <div class="timeline-icon me-3">
+                                    
+                                        <i class="bi bi-file-earmark-code-fill text-primary"></i>
+                                    
+                                        <i class="bi bi-shield-check-fill text-warning"></i>
+                                    
+                                        <i class="bi bi-cloud-upload-fill text-success"></i>
+                                    
+                                        <i class="bi bi-exclamation-triangle-fill text-danger"></i>
+                                    
+                                        <i class="bi bi-info-circle-fill text-info"></i>
+                                    
+                                </div>
+                                <div class="timeline-content flex-grow-1">
+                                    <div class="card">
+                                        <div class="card-body py-2">
+                                            <div class="d-flex justify-content-between align-items-start">
+                                                <div>
+                                                    <span class="badge 
+                                                        bg-primary
+                                                        bg-warning
+                                                        bg-success
+                                                        bg-danger
+                                                        bg-info">
+                                                        
+                                                    </span>
+                                                    <p class="mb-0 mt-2"></p>
+                                                </div>
+                                                <small class="text-muted"></small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <!-- Modal para visualizar XML -->
+    <div class="modal fade" id="xmlModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="xmlModalTitle">
+                        <i class="bi bi-file-code me-2"></i>
+                        Visualizar XML
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <pre><code id="xmlContent" class="language-xml"></code></pre>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary" onclick="copiarXML()">
+                        <i class="bi bi-clipboard me-1"></i>Copiar XML
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+// Dados da submissão (JSON)
+const submissaoData = ;
+
+// Visualizar XML
+function visualizarXML(tipo) {
+    const modal = new bootstrap.Modal(document.getElementById('xmlModal'));
+    const title = document.getElementById('xmlModalTitle');
+    const content = document.getElementById('xmlContent');
+    
+    let xmlData = '';
+    if (tipo === 'xml_gerado' && submissaoData.xml_gerado) {
+        xmlData = submissaoData.xml_gerado.conteudo || 'XML não disponível';
+        title.innerHTML = '<i class="bi bi-file-code me-2"></i>XML Gerado';
+    } else if (tipo === 'xml_assinado' && submissaoData.xml_assinado) {
+        xmlData = submissaoData.xml_assinado.conteudo || 'XML não disponível';
+        title.innerHTML = '<i class="bi bi-shield-check me-2"></i>XML Assinado';
+    }
+    
+    // Formata o XML (básico)
+    content.textContent = formatXML(xmlData);
+    modal.show();
+}
+
+// Formatar XML para exibição
+function formatXML(xml) {
+    try {
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xml, 'text/xml');
+        const serializer = new XMLSerializer();
+        return serializer.serializeToString(xmlDoc);
+    } catch (e) {
+        return xml; // Retorna o XML original se não conseguir formatar
+    }
+}
+
+// Copiar XML para clipboard
+function copiarXML() {
+    const content = document.getElementById('xmlContent').textContent;
+    navigator.clipboard.writeText(content).then(() => {
+        alert('XML copiado para a área de transferência!');
+    }).catch(err => {
+        console.error('Erro ao copiar XML:', err);
+        alert('Erro ao copiar XML. Tente selecionar manualmente.');
+    });
+}
+
+// Exportar detalhes
+function exportarDetalhes() {
+    const dados = {
+        submissao: submissaoData,
+        exportado_em: new Date().toISOString()
+    };
+    
+    const blob = new Blob([JSON.stringify(dados, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `submissao_${submissaoData.id}_detalhes.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+</script>

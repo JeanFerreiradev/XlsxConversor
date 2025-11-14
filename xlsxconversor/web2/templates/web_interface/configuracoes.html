@@ -1,0 +1,391 @@
+<div class="container">
+    <!-- Cabeçalho -->
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="text-primary">
+                <i class="bi bi-gear me-2"></i>
+                Configurações do Sistema
+            </h2>
+            <p class="text-muted">
+                Configure certificados digitais, webservices e parâmetros do sistema
+            </p>
+        </div>
+        <div class="col-auto">
+            <a href="" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i>Voltar ao Dashboard
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Certificados Digitais -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-shield-check me-2"></i>
+                        Certificados Digitais A1
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form id="certificadoForm">
+                        
+                        <div class="mb-3">
+                            <label for="certificado_file" class="form-label">
+                                <i class="bi bi-file-lock me-1"></i>
+                                Arquivo do Certificado (.pfx/.p12)
+                            </label>
+                            <input type="file" class="form-control" id="certificado_file" name="certificado_file" 
+                                   accept=".pfx,.p12">
+                            <div class="form-text">
+                                Selecione o arquivo do certificado digital A1 emitido por AC credenciada ICP-Brasil
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="certificado_senha" class="form-label">
+                                <i class="bi bi-key me-1"></i>
+                                Senha do Certificado
+                            </label>
+                            <input type="password" class="form-control" id="certificado_senha" name="certificado_senha" 
+                                   placeholder="Digite a senha do certificado">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="certificado_nome" class="form-label">
+                                <i class="bi bi-tag me-1"></i>
+                                Nome/Identificação
+                            </label>
+                            <input type="text" class="form-control" id="certificado_nome" name="certificado_nome" 
+                                   placeholder="Ex: Certificado Principal Empresa LTDA">
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-warning">
+                                <i class="bi bi-upload me-1"></i>
+                                Carregar Certificado
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <!-- Lista de certificados -->
+                    <div class="mt-4" id="certificadosList">
+                        <h6 class="text-muted">Certificados Carregados</h6>
+                        <div class="list-group list-group-flush">
+                            <!-- Será preenchido dinamicamente -->
+                            <div class="list-group-item text-center text-muted py-4">
+                                <i class="bi bi-shield-x fs-3 d-block mb-2"></i>
+                                Nenhum certificado carregado
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Configurações de Webservice -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-cloud me-2"></i>
+                        Webservice SEFAZ-ES
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form id="webserviceForm">
+                        
+                        
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="bi bi-toggle-on me-1"></i>
+                                Ambiente
+                            </label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="ambiente" id="ambiente_homolog" 
+                                       value="homologacao" checked>
+                                <label class="form-check-label" for="ambiente_homolog">
+                                    <i class="bi bi-wrench me-1"></i>Homologação (Testes)
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="ambiente" id="ambiente_prod" 
+                                       value="producao">
+                                <label class="form-check-label" for="ambiente_prod">
+                                    <i class="bi bi-shield-check me-1"></i>Produção
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="url_homologacao" class="form-label">
+                                <i class="bi bi-link me-1"></i>
+                                URL Homologação
+                            </label>
+                            <input type="url" class="form-control" id="url_homologacao" name="url_homologacao" 
+                                   value="https://homologacao.sefaz.es.gov.br/royalties/ws">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="url_producao" class="form-label">
+                                <i class="bi bi-link me-1"></i>
+                                URL Produção
+                            </label>
+                            <input type="url" class="form-control" id="url_producao" name="url_producao" 
+                                   value="https://producao.sefaz.es.gov.br/royalties/ws">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="timeout" class="form-label">
+                                <i class="bi bi-clock me-1"></i>
+                                Timeout (segundos)
+                            </label>
+                            <input type="number" class="form-control" id="timeout" name="timeout" 
+                                   value="30" min="10" max="300">
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-info">
+                                <i class="bi bi-check-circle me-1"></i>
+                                Salvar Configurações
+                            </button>
+                            <button type="button" class="btn btn-outline-info" onclick="testarConexao()">
+                                <i class="bi bi-wifi me-1"></i>
+                                Testar Conexão
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Configurações do Sistema -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-sliders me-2"></i>
+                        Parâmetros do Sistema
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form id="sistemaForm">
+                        
+                        
+                        <div class="mb-3">
+                            <label for="max_upload_size" class="form-label">
+                                <i class="bi bi-hdd me-1"></i>
+                                Tamanho Máximo de Upload (MB)
+                            </label>
+                            <input type="number" class="form-control" id="max_upload_size" name="max_upload_size" 
+                                   value="10" min="1" max="100">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="backup_enabled" class="form-label">
+                                <i class="bi bi-shield me-1"></i>
+                                Backup Automático
+                            </label>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="backup_enabled" name="backup_enabled" checked>
+                                <label class="form-check-label" for="backup_enabled">
+                                    Ativar backup automático dos arquivos
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="log_level" class="form-label">
+                                <i class="bi bi-journal-text me-1"></i>
+                                Nível de Log
+                            </label>
+                            <select class="form-select" id="log_level" name="log_level">
+                                <option value="DEBUG">DEBUG (Detalhado)</option>
+                                <option value="INFO" selected>INFO (Normal)</option>
+                                <option value="WARNING">WARNING (Avisos)</option>
+                                <option value="ERROR">ERROR (Somente Erros)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-secondary">
+                                <i class="bi bi-check-circle me-1"></i>
+                                Salvar Parâmetros
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status do Sistema -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-activity me-2"></i>
+                        Status do Sistema
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="text-center">
+                                <i class="bi bi-database fs-1 text-success"></i>
+                                <h6 class="mt-2">Firestore</h6>
+                                <span class="badge bg-success">Conectado</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-center">
+                                <i class="bi bi-cloud fs-1" id="webservice-icon"></i>
+                                <h6 class="mt-2">Webservice</h6>
+                                <span class="badge bg-warning" id="webservice-status">Não testado</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="row text-center">
+                        <div class="col-12">
+                            <h6 class="text-muted">Informações do Sistema</h6>
+                            <table class="table table-sm">
+                                <tr>
+                                    <td><strong>Versão:</strong></td>
+                                    <td>1.0.0</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Última Atualização:</strong></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Certificados:</strong></td>
+                                    <td><span id="cert-count">0</span> carregados</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+$(document).ready(function() {
+    // Formulário de certificado
+    $('#certificadoForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        const file = $('#certificado_file')[0].files[0];
+        const senha = $('#certificado_senha').val();
+        const nome = $('#certificado_nome').val();
+        
+        if (!file || !senha || !nome) {
+            alert('Por favor, preencha todos os campos do certificado.');
+            return;
+        }
+        
+        // Simula carregamento do certificado
+        const btn = $(this).find('button[type="submit"]');
+        const originalText = btn.html();
+        btn.prop('disabled', true).html('<i class="bi bi-hourglass-split me-1"></i>Carregando...');
+        
+        setTimeout(() => {
+            alert('Certificado carregado com sucesso!');
+            btn.prop('disabled', false).html(originalText);
+            $('#certificadoForm')[0].reset();
+            atualizarListaCertificados();
+        }, 2000);
+    });
+
+    // Formulário de webservice
+    $('#webserviceForm').on('submit', function(e) {
+        e.preventDefault();
+        alert('Configurações de webservice salvas com sucesso!');
+    });
+
+    // Formulário do sistema
+    $('#sistemaForm').on('submit', function(e) {
+        e.preventDefault();
+        alert('Parâmetros do sistema salvos com sucesso!');
+    });
+});
+
+// Testar conexão com webservice
+function testarConexao() {
+    const btn = event.target;
+    const originalText = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Testando...';
+    
+    const icon = document.getElementById('webservice-icon');
+    const status = document.getElementById('webservice-status');
+    
+    // Simula teste de conexão
+    setTimeout(() => {
+        const sucesso = Math.random() > 0.3; // 70% de chance de sucesso
+        
+        if (sucesso) {
+            icon.className = 'bi bi-cloud-check fs-1 text-success';
+            status.className = 'badge bg-success';
+            status.textContent = 'Conectado';
+            alert('Conexão com webservice testada com sucesso!');
+        } else {
+            icon.className = 'bi bi-cloud-x fs-1 text-danger';
+            status.className = 'badge bg-danger';
+            status.textContent = 'Erro';
+            alert('Erro ao conectar com webservice. Verifique as configurações.');
+        }
+        
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+    }, 3000);
+}
+
+// Atualizar lista de certificados
+function atualizarListaCertificados() {
+    const lista = document.getElementById('certificadosList').querySelector('.list-group');
+    const contadorCert = document.getElementById('cert-count');
+    
+    // Simula certificados carregados
+    const certificados = [
+        { nome: 'Certificado Principal Empresa LTDA', valido_ate: '2025-12-31', status: 'ativo' }
+    ];
+    
+    if (certificados.length > 0) {
+        lista.innerHTML = '';
+        certificados.forEach((cert, index) => {
+            lista.innerHTML += `
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="mb-1">${cert.nome}</h6>
+                        <small class="text-muted">Válido até: ${cert.valido_ate}</small>
+                    </div>
+                    <div>
+                        <span class="badge bg-success me-2">${cert.status}</span>
+                        <button class="btn btn-sm btn-outline-danger" onclick="removerCertificado(${index})">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+        contadorCert.textContent = certificados.length;
+    }
+}
+
+// Remover certificado
+function removerCertificado(index) {
+    if (confirm('Tem certeza que deseja remover este certificado?')) {
+        alert('Certificado removido com sucesso!');
+        // Atualizar lista
+        atualizarListaCertificados();
+    }
+}
+</script>
